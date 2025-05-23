@@ -10,10 +10,15 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] private InputReaderSO _inputReaderSO;
 
+    [Header("Check if spawn is valid based on other entities")]
     [SerializeField] private float _spawnRadiusLowerBound;
     [SerializeField] private float _spawnRadiusUpperBound;
     
     [SerializeField] private float _minDistanceBetweenEntities;
+
+    [Header("Check if spawn is valid based on area collision")]
+    [SerializeField] private LayerMask _spawnableAreaLayer;
+    [SerializeField] private float _spawnCheckHeight = 5f;
 
     private List<EnemyController> _spawnedEnemies = new ();
 
@@ -36,6 +41,13 @@ public class EnemySpawner : MonoBehaviour
             spawnPosition.x = _playerTransform.position.x + spawnCoordinats.x;
             spawnPosition.z = _playerTransform.position.z + spawnCoordinats.y;
 
+            if (!IsSpawnLocationValid(spawnPosition))
+            {
+                isValid = false;
+
+                continue;
+            } 
+
             foreach (var spawnedEnemy in _spawnedEnemies)
             {
                 if (Vector3.Distance(spawnPosition, spawnedEnemy.transform.position) < _minDistanceBetweenEntities)
@@ -45,12 +57,27 @@ public class EnemySpawner : MonoBehaviour
                     continue;
                 }
             }
+
+            isValid = true;
+
         } while (!isValid && iterCount < MAX_SPAWN_SEARCH_ITERATIONS);
 
+        if (iterCount >= MAX_SPAWN_SEARCH_ITERATIONS) return;
+        
         EnemyController enemy = Instantiate(_enemyPrefab, spawnPosition, Quaternion.identity);
         enemy.Init(target: _playerTransform);
         
         _spawnedEnemies.Add(enemy);
+    }
+
+    Vector3 globalCheckPosition;
+
+    private bool IsSpawnLocationValid(Vector3 position)
+    {
+        Vector3 checkPosition = position + Vector3.up * _spawnCheckHeight;
+        globalCheckPosition = checkPosition;
+
+        return Physics.Raycast(checkPosition, Vector3.down, out RaycastHit hit, _spawnCheckHeight * 2, _spawnableAreaLayer);
     }
 
     private void DestroyClosestEnemy() 
