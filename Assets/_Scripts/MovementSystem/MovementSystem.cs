@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class MovementSystem
@@ -43,6 +44,25 @@ public class MovementSystem
         State.SetVelocity(Vector3.ClampMagnitude(velocity, _stats.MaxVelocity));
     }  
 
+    public void CollisionCheck(Transform transform)
+    {
+        Vector3 center = transform.position + Vector3.up * _stats.CapsuleHeight / 2;
+        Vector3 dimentions = new (_stats.CapsuleRadius, _stats.CapsuleHeight / 2, _stats.CapsuleRadius);
+
+        bool canMoveOnXAxis = !Physics.BoxCast(center, dimentions, State.Velocity.With(y: 0, z: 0).normalized, out RaycastHit hitInfoXAxis, transform.rotation, _stats.CapsuleRadius, _stats.CollisionLayer);
+        bool canMoveOnZAxis = !Physics.BoxCast(center, dimentions, State.Velocity.With(y: 0, x: 0).normalized, out RaycastHit hitInfoZAxis, transform.rotation, _stats.CapsuleRadius, _stats.CollisionLayer);
+
+        if (!canMoveOnXAxis)
+        {
+            State.SetVelocity(State.Velocity.With(x: 0));
+        }
+
+        if (!canMoveOnZAxis)
+        {
+            State.SetVelocity(State.Velocity.With(z: 0));
+        }
+    }
+
     public void ApplyRotateToTarget(Transform currentTransform, Transform target)
     {
         Vector3 direction = target.position - currentTransform.position;
@@ -53,7 +73,7 @@ public class MovementSystem
     public void ApplyRotateInDirection(Transform currentTransform, Vector3 direction)
     {
         if (direction == Vector3.zero) return;
-        
+
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         currentTransform.rotation = Quaternion.Slerp(currentTransform.rotation, targetRotation, _stats.RotationSpeed * Time.deltaTime);
     }

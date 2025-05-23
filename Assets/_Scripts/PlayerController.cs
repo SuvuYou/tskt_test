@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         _movementSystem.ApplyAcceleration(MapVectorToCameraSpace(_inputReaderSO.Direction));
         _movementSystem.ApplyDrag();
+        _movementSystem.CollisionCheck(transform);
 
         transform.position += _movementSystem.State.Velocity * Time.deltaTime;
 
