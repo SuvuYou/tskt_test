@@ -1,4 +1,4 @@
 using UnityEngine.Events;
 
 [System.Serializable]
-public class HitEvent : UnityEvent<HitDirection, int> { }
+public class HitEvent : UnityEvent<HitDirection> { }

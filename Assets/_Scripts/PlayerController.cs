@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         _healthSystem.TakeDamage(damage);
 
-        OnTakeDamage?.Invoke(hitDirection, damage);
+        OnTakeDamage?.Invoke(hitDirection);
     } 
 
     [SerializeField] private Transform _cameraTransform;

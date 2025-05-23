@@ -4,12 +4,14 @@ class HitIndicatorManager : MonoBehaviour
 {
     [SerializeField] private HitIndicator _hitIndicatorLeft, _hitIndicatorRight, _hitIndicatorTop, _hitIndicatorBottom;
 
-    public void ShowHitIndicator(HitDirection hitDirection, int damage)
+    private void Start()
     {
-        _hitIndicatorLeft.Hide();
-        _hitIndicatorRight.Hide();
-        _hitIndicatorTop.Hide();
-        _hitIndicatorBottom.Hide();
+        HideAllHitIndicators();
+    }
+
+    public void ShowHitIndicator(HitDirection hitDirection)
+    {
+        HideAllHitIndicators();
 
         switch (hitDirection)
         {
@@ -18,5 +20,13 @@ class HitIndicatorManager : MonoBehaviour
             case HitDirection.Forward: _hitIndicatorTop.Show(); break;
             case HitDirection.Backward: _hitIndicatorBottom.Show(); break;
         }
+    }
+
+    private void HideAllHitIndicators() 
+    {
+        _hitIndicatorLeft.Hide();
+        _hitIndicatorRight.Hide();
+        _hitIndicatorTop.Hide();
+        _hitIndicatorBottom.Hide();
     }
 }
