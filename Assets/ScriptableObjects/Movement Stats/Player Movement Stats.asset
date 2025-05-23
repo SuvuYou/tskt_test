@@ -15,3 +15,4 @@ MonoBehaviour:
   Acceleration: 200
   Drag: 5
   MaxVelocity: 30
+  RotationSpeed: 5

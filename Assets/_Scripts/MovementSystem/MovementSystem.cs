@@ -16,10 +16,12 @@ public class MovementSystem
     {
         var acceleration = direction * _stats.Acceleration * Time.deltaTime;
 
-        State.Velocity.x += acceleration.x;
-        State.Velocity.z += acceleration.y;
+        var velocity = State.Velocity;
 
-        State.Velocity = Vector3.ClampMagnitude(State.Velocity, _stats.MaxVelocity);
+        velocity.x += acceleration.x;
+        velocity.z += acceleration.y;
+
+        State.SetVelocity(Vector3.ClampMagnitude(velocity, _stats.MaxVelocity));
     }   
 
     public void ApplyDrag()
@@ -28,20 +30,28 @@ public class MovementSystem
 
         if (drag.magnitude > State.Velocity.magnitude)
         {
-            State.Velocity = Vector3.zero;
+            State.SetVelocity(Vector3.zero);
 
             return;
         }
-            
-        State.Velocity.x += drag.x;
-        State.Velocity.z += drag.z;
 
-        State.Velocity = Vector3.ClampMagnitude(State.Velocity, _stats.MaxVelocity);
+        var velocity = State.Velocity;
+    
+        velocity.x += drag.x;
+        velocity.z += drag.z;
+
+        State.SetVelocity(Vector3.ClampMagnitude(velocity, _stats.MaxVelocity));
     }  
 
     public void ApplyRotateToTarget(Transform currentTransform, Transform target)
     {
         Vector3 direction = target.position - currentTransform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        currentTransform.rotation = Quaternion.Slerp(currentTransform.rotation, targetRotation, _stats.RotationSpeed * Time.deltaTime);
+    }
+
+    public void ApplyRotateInDirection(Transform currentTransform, Vector3 direction)
+    {
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         currentTransform.rotation = Quaternion.Slerp(currentTransform.rotation, targetRotation, _stats.RotationSpeed * Time.deltaTime);
     }

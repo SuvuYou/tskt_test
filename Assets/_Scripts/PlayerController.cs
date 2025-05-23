@@ -28,14 +28,14 @@ public class PlayerController : MonoBehaviour, IDamagable
         _healthSystem = new HealthSystem(_healthStats);
     }
 
-    
-
     private void Update()
     {
         _movementSystem.ApplyAcceleration(MapVectorToCameraSpace(_inputReaderSO.Direction));
         _movementSystem.ApplyDrag();
 
         transform.position += _movementSystem.State.Velocity * Time.deltaTime;
+
+        _movementSystem.ApplyRotateInDirection(transform, GetFacingDirection());
     }
 
     private Vector2 MapVectorToCameraSpace(Vector2 direction)
@@ -45,5 +45,10 @@ public class PlayerController : MonoBehaviour, IDamagable
         Vector3 rightDirection = Vector3.ProjectOnPlane(_cameraTransform.right, Vector3.up).normalized;
 
         return (forwardDirection * direction.y + rightDirection * direction.x).ToVector2WithXZ();
+    }
+
+    private Vector3 GetFacingDirection()
+    {
+        return _movementSystem.State.LastNonZeroVelocity.normalized;
     }
 }
