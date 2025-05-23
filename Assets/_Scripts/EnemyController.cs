@@ -8,13 +8,14 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float _moveAwayZoneRadius;
     [SerializeField] private float _stayZoneRadius;
 
-    private Transform _tragetTransform;
+    private Transform _targetTransform;
 
     private MovementSystem _movementSystem;
+    
 
     public void Init(Transform target)
     {
-        _tragetTransform = target;
+        _targetTransform = target;
     }
 
     private void Start()
@@ -28,17 +29,19 @@ public class EnemyController : MonoBehaviour
         _movementSystem.ApplyDrag();
 
         transform.position += _movementSystem.State.Velocity * Time.deltaTime;
+
+        _movementSystem.ApplyRotateToTarget(transform, _targetTransform);
     }
 
     private Vector2 GetVectorToTarget()
     {
-        Vector2 directionToTarget = new (_tragetTransform.position.x - transform.position.x, _tragetTransform.position.z - transform.position.z);
+        Vector2 directionToTarget = new (_targetTransform.position.x - transform.position.x, _targetTransform.position.z - transform.position.z);
    
         var distanceToTarget = directionToTarget.magnitude;
 
         if (distanceToTarget < _moveAwayZoneRadius)
         {
-            Vector2 directionFromTarget = new (transform.position.x - _tragetTransform.position.x, transform.position.z - _tragetTransform.position.z);
+            Vector2 directionFromTarget = new (transform.position.x - _targetTransform.position.x, transform.position.z - _targetTransform.position.z);
 
             return directionFromTarget.normalized;
         }

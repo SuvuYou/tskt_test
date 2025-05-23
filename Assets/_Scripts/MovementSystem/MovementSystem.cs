@@ -38,4 +38,11 @@ public class MovementSystem
 
         State.Velocity = Vector3.ClampMagnitude(State.Velocity, _stats.MaxVelocity);
     }  
+
+    public void ApplyRotateToTarget(Transform currentTransform, Transform target)
+    {
+        Vector3 direction = target.position - currentTransform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        currentTransform.rotation = Quaternion.Slerp(currentTransform.rotation, targetRotation, _stats.RotationSpeed * Time.deltaTime);
+    }
 }
