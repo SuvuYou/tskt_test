@@ -5,51 +5,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _cameraTransform;
     [SerializeField] private InputReaderSO _inputReaderSO;
 
-    [SerializeField] private float _acceleration;
-    [SerializeField] private float _drag;
-    [SerializeField] private float _maxVelocity;
-
-    private Vector3 _velocity;
+    [SerializeField] private MovementStats _movementStats;
+    private MovementSystem _movementSystem;
 
     private void Start()
     {
-        _inputReaderSO.EnableActions();        
+        _inputReaderSO.EnableActions();      
+
+        _movementSystem = new MovementSystem(_movementStats);
     }
 
     private void Update()
     {
-        ApplyAcceleration(MapVectorToCameraSpace(_inputReaderSO.Direction));
-        ApplyDrag();
+        _movementSystem.ApplyAcceleration(MapVectorToCameraSpace(_inputReaderSO.Direction));
+        _movementSystem.ApplyDrag();
 
-        transform.position += _velocity * Time.deltaTime;
+        transform.position += _movementSystem.State.Velocity * Time.deltaTime;
     }
-
-    private void ApplyAcceleration(Vector2 direction)
-    {
-        var acceleration = direction * _acceleration * Time.deltaTime;
-
-        _velocity.x += acceleration.x;
-        _velocity.z += acceleration.y;
-
-        _velocity = Vector3.ClampMagnitude(_velocity, _maxVelocity);
-    }   
-
-    private void ApplyDrag()
-    {
-        var drag = -_velocity * _drag * Time.deltaTime;
-
-        if (drag.magnitude > _velocity.magnitude)
-        {
-            _velocity = Vector3.zero;
-
-            return;
-        }
-            
-        _velocity.x += drag.x;
-        _velocity.z += drag.z;
-
-        _velocity = Vector3.ClampMagnitude(_velocity, _maxVelocity);
-    }  
 
     private Vector2 MapVectorToCameraSpace(Vector2 direction)
     {

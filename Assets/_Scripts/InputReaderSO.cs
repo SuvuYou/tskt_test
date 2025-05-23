@@ -29,6 +29,6 @@ public class InputReaderSO : ScriptableObject, PlayerInputActions.IMainActions
 
     public void OnAttack(InputAction.CallbackContext context) 
     {
-        OnAttackEvent?.Invoke();
+        if (context.performed) OnAttackEvent?.Invoke();
     }
 }
