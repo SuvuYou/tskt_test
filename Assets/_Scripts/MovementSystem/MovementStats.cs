@@ -4,10 +4,10 @@ using UnityEngine;
 public class MovementStats : ScriptableObject
 {   
     [Header("Movement")]
-    [SerializeField] public float Acceleration;
-    [SerializeField] public float Drag;
-    [SerializeField] public float MaxVelocity;
+    public float Acceleration;
+    public float Drag;
+    public float MaxVelocity;
 
     [Header("Rotation")]
-    [SerializeField] public float RotationSpeed;
+    public float RotationSpeed;
 }
