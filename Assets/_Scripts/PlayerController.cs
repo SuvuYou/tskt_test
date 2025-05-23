@@ -25,10 +25,10 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 MapVectorToCameraSpace(Vector2 direction)
     {
-        Vector2 forwardDirection = new Vector2(_cameraTransform.forward.x, _cameraTransform.forward.z).normalized;
+        Vector3 forwardDirection = Vector3.ProjectOnPlane(_cameraTransform.forward, Vector3.up).normalized;
+        
+        Vector3 rightDirection = Vector3.ProjectOnPlane(_cameraTransform.right, Vector3.up).normalized;
 
-        Vector2 rightDirection = new Vector2(_cameraTransform.right.x, _cameraTransform.right.z).normalized;
-
-        return forwardDirection * direction.y + rightDirection * direction.x;
+        return (forwardDirection * direction.y + rightDirection * direction.x).ToVector2WithXZ();
     }
 }

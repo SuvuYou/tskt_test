@@ -51,10 +51,8 @@ public class ShootingSystem
     {
         if (State.Target == null || !State.IsEnabled) return;
 
-        var movementDirection = State.Target.position - _bulletSpawnPoint.position;
-
-        movementDirection.y = 0;
-        movementDirection.Normalize();
+        Vector3 movementDirection = State.Target.position - _bulletSpawnPoint.position;
+        movementDirection = Vector3.ProjectOnPlane(movementDirection, Vector3.up).normalized;
 
         BulletsManager.Instance.SpawnBullet(_stats, _bulletSpawnPoint, movementDirection);
     }

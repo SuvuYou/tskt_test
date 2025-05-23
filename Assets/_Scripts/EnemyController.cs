@@ -46,13 +46,13 @@ public class EnemyController : MonoBehaviour
 
     private Vector2 GetVectorToTarget()
     {
-        Vector2 directionToTarget = new (_targetTransform.position.x - transform.position.x, _targetTransform.position.z - transform.position.z);
+        Vector2 directionToTarget = (_targetTransform.position - transform.position).ToVector2WithXZ();
    
         var distanceToTarget = directionToTarget.magnitude;
 
         if (distanceToTarget < _moveAwayZoneRadius)
         {
-            Vector2 directionFromTarget = new (transform.position.x - _targetTransform.position.x, transform.position.z - _targetTransform.position.z);
+            Vector2 directionFromTarget = (transform.position - _targetTransform.position).ToVector2WithXZ();
 
             return directionFromTarget.normalized;
         }
