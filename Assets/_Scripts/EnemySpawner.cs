@@ -70,12 +70,9 @@ public class EnemySpawner : MonoBehaviour
         _spawnedEnemies.Add(enemy);
     }
 
-    Vector3 globalCheckPosition;
-
     private bool IsSpawnLocationValid(Vector3 position)
     {
         Vector3 checkPosition = position + Vector3.up * _spawnCheckHeight;
-        globalCheckPosition = checkPosition;
 
         return Physics.Raycast(checkPosition, Vector3.down, out RaycastHit hit, _spawnCheckHeight * 2, _spawnableAreaLayer);
     }
