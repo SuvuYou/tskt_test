@@ -52,6 +52,8 @@ public class MovementSystem
 
     public void ApplyRotateInDirection(Transform currentTransform, Vector3 direction)
     {
+        if (direction == Vector3.zero) return;
+        
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         currentTransform.rotation = Quaternion.Slerp(currentTransform.rotation, targetRotation, _stats.RotationSpeed * Time.deltaTime);
     }
