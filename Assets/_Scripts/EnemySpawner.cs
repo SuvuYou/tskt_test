@@ -19,10 +19,10 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        _inputReaderSO.OnAttackEvent += () => SpawnEnemy();
+        _inputReaderSO.OnAttackEvent += () => DestroyClosestEnemy();
     }
 
-    private void SpawnEnemy()
+    public void SpawnEnemy()
     {
         int iterCount = 0;
         Vector3 spawnPosition = Vector3.zero;
@@ -51,5 +51,27 @@ public class EnemySpawner : MonoBehaviour
         enemy.Init(target: _playerTransform);
         
         _spawnedEnemies.Add(enemy);
+    }
+
+    private void DestroyClosestEnemy() 
+    {
+        EnemyController closestEnemy = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (var spawnedEnemy in _spawnedEnemies)
+        {
+            var distanceToPlayer = Vector3.Distance(spawnedEnemy.transform.position, _playerTransform.position);
+
+            if (distanceToPlayer < closestDistance)
+            {
+                closestEnemy = spawnedEnemy;
+                closestDistance = distanceToPlayer;
+            }
+        }
+
+        if (closestEnemy == null) return;
+        
+        _spawnedEnemies.Remove(closestEnemy);
+        closestEnemy.Kill();
     }
 }
