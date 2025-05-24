@@ -7,6 +7,7 @@ public class InputReaderSO : ScriptableObject, PlayerInputActions.IMainActions
 {
     public event Action<Vector2> OnMoveEvent;
     public event Action OnAttackEvent;
+    public event Action OnEscapeEvent;
 
     public PlayerInputActions InputActions;
     public Vector2 Direction => InputActions.Main.Move.ReadValue<Vector2>();
@@ -30,5 +31,10 @@ public class InputReaderSO : ScriptableObject, PlayerInputActions.IMainActions
     public void OnAttack(InputAction.CallbackContext context) 
     {
         if (context.performed) OnAttackEvent?.Invoke();
+    }
+
+    public void OnEscape(InputAction.CallbackContext context) 
+    {
+        if (context.performed) OnEscapeEvent?.Invoke();
     }
 }
