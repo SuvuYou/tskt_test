@@ -13,12 +13,12 @@ public class EnemyController : MonoBehaviour
 
     private Transform _targetTransform;
 
-    private MovementSystem _movementSystem;
+    public MovementSystem EnemyMovementSystem { get; private set; }
     private ShootingSystem _shootingSystem;
     
     public void Init(Transform target)
     {
-        _movementSystem = new MovementSystem(_movementStats);
+        EnemyMovementSystem = new MovementSystem(_movementStats);
         _shootingSystem = new ShootingSystem(_shootingStats, _bulletSpawnPoint);
 
         _targetTransform = target;
@@ -29,13 +29,13 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
-        _movementSystem.ApplyAcceleration(GetVectorToTarget());
-        _movementSystem.ApplyDrag();
-        _movementSystem.CollisionCheck(transform);
+        EnemyMovementSystem.ApplyAcceleration(GetVectorToTarget());
+        EnemyMovementSystem.ApplyDrag();
+        EnemyMovementSystem.CollisionCheck(transform);
 
-        transform.position += _movementSystem.State.Velocity * Time.deltaTime;
+        transform.position += EnemyMovementSystem.State.Velocity * Time.deltaTime;
 
-        _movementSystem.ApplyRotateToTarget(transform, _targetTransform);
+        EnemyMovementSystem.ApplyRotateToTarget(transform, _targetTransform);
 
         _shootingSystem.Update();
     }

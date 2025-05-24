@@ -11,6 +11,8 @@ public class MovementSystem
         _stats = movementStats;
 
         State = new MovementState();
+
+        State.SetVelocityThreshold(_stats.VelocityMovementThreshold);
     }
 
     public void ApplyAcceleration(Vector2 direction)

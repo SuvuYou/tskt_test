@@ -15,4 +15,7 @@ public class MovementStats : ScriptableObject
     public float CapsuleHeight = 2.0f;
     public float CapsuleRadius = 0.5f;
     public LayerMask CollisionLayer;
+
+    [Header("Animation")]
+    public float VelocityMovementThreshold = 8f;
 }
