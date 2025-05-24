@@ -1,12 +1,11 @@
 using UnityEngine;
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 
 public class SmokeEmitter : MonoBehaviour
 {
     [Header("Smoke Settings")]
-    [SerializeField] private GameObject[] _smokePrefabs;
+    [SerializeField] private SmokeParticle[] _smokePrefabs;
     [SerializeField] private Transform _emissionPoint;
     [SerializeField] private Transform _parent;
 
@@ -29,9 +28,17 @@ public class SmokeEmitter : MonoBehaviour
     [SerializeField] private float _scaleOutEndSize = 0f;
 
     private Timer _emitSmokeTimer;
+    private List<ObjectPool<SmokeParticle>> _smokePools;
 
     private void Start()
     {
+        _smokePools = new List<ObjectPool<SmokeParticle>>();
+        
+        foreach (SmokeParticle randomPrefab in _smokePrefabs)
+        {
+            _smokePools.Add(new ObjectPool<SmokeParticle>(randomPrefab, 10, _parent));
+        }
+
         _emitSmokeTimer = new Timer(GetRandomSpawnInterval());
         _emitSmokeTimer.Reset();
         _emitSmokeTimer.Start();
@@ -66,18 +73,17 @@ public class SmokeEmitter : MonoBehaviour
 
     private void EmitSmoke()
     {
-        GameObject prefab = _smokePrefabs[Random.Range(0, _smokePrefabs.Length)];
-        GameObject smoke = Instantiate(prefab, _emissionPoint.position, Quaternion.identity, _parent);
+        ObjectPool<SmokeParticle> smokePool = _smokePools[Random.Range(0, _smokePools.Count)];
+        SmokeParticle smoke = smokePool.Get();
+
+        smoke.transform.position = _emissionPoint.position;
+        smoke.transform.localScale = Vector3.one;
 
         float arcLength = Random.Range(_arcLengthMin, _arcLengthMax);
         float arcHeight = Random.Range(_arcHeightMin, _arcHeightMax);
         Vector3[] path = GenerateSquareRootPath(_emissionPoint.position, arcLength, arcHeight);
 
-        smoke.transform.DOPath(path, _duration, PathType.CatmullRom)
-            .SetEase(Ease.Linear)
-            .OnComplete(() => Destroy(smoke));
-
-        smoke.transform.DOScale(_scaleOutEndSize, _duration).SetEase(Ease.InCubic);
+        smoke.Initialize(path, _duration, _scaleOutEndSize, (SmokeParticle smoke) => smokePool.ReturnToPool(smoke));
     }
 
     private Vector3[] GenerateSquareRootPath(Vector3 origin, float length, float height)

@@ -20,11 +20,14 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private LayerMask _spawnableAreaLayer;
     [SerializeField] private float _spawnCheckHeight = 5f;
 
-    private List<EnemyController> _spawnedEnemies = new ();
+    private List<EnemyController> _activeEnemies = new();
+    private ObjectPool<EnemyController> _enemyPool;
 
     private void Start()
     {
-        _inputReaderSO.OnAttackEvent += () => DestroyClosestEnemy();
+        _enemyPool = new ObjectPool<EnemyController>(_enemyPrefab, 10, transform);
+
+        _inputReaderSO.OnAttackEvent += DestroyClosestEnemy;
     }
 
     public void SpawnEnemy()
@@ -48,7 +51,7 @@ public class EnemySpawner : MonoBehaviour
                 continue;
             } 
 
-            foreach (var spawnedEnemy in _spawnedEnemies)
+            foreach (var spawnedEnemy in _activeEnemies)
             {
                 if (Vector3.Distance(spawnPosition, spawnedEnemy.transform.position) < _minDistanceBetweenEntities)
                 {
@@ -64,10 +67,12 @@ public class EnemySpawner : MonoBehaviour
 
         if (iterCount >= MAX_SPAWN_SEARCH_ITERATIONS) return;
         
-        EnemyController enemy = Instantiate(_enemyPrefab, spawnPosition, Quaternion.identity);
-        enemy.Init(target: _playerTransform);
-        
-        _spawnedEnemies.Add(enemy);
+        EnemyController enemy = _enemyPool.Get();
+        enemy.transform.position = spawnPosition;
+        enemy.transform.rotation = Quaternion.identity;
+        enemy.Init(_playerTransform);
+
+        _activeEnemies.Add(enemy);
     }
 
     private bool IsSpawnLocationValid(Vector3 position)
@@ -77,25 +82,25 @@ public class EnemySpawner : MonoBehaviour
         return Physics.Raycast(checkPosition, Vector3.down, out RaycastHit hit, _spawnCheckHeight * 2, _spawnableAreaLayer);
     }
 
-    private void DestroyClosestEnemy() 
+    private void DestroyClosestEnemy()
     {
-        EnemyController closestEnemy = null;
-        float closestDistance = float.MaxValue;
+        EnemyController closest = null;
+        float minDist = float.MaxValue;
 
-        foreach (var spawnedEnemy in _spawnedEnemies)
+        foreach (var enemy in _activeEnemies)
         {
-            var distanceToPlayer = Vector3.Distance(spawnedEnemy.transform.position, _playerTransform.position);
-
-            if (distanceToPlayer < closestDistance)
+            float dist = Vector3.Distance(enemy.transform.position, _playerTransform.position);
+            if (dist < minDist)
             {
-                closestEnemy = spawnedEnemy;
-                closestDistance = distanceToPlayer;
+                closest = enemy;
+                minDist = dist;
             }
         }
 
-        if (closestEnemy == null) return;
-        
-        _spawnedEnemies.Remove(closestEnemy);
-        closestEnemy.Kill();
+        if (closest != null)
+        {
+            _activeEnemies.Remove(closest);
+            _enemyPool.ReturnToPool(closest);
+        }
     }
 }

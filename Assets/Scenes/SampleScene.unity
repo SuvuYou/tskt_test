@@ -4562,8 +4562,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _smokePrefabs:
-  - {fileID: 2143743420052211869, guid: 30e93259e96dccf48b9682fc4ed4204c, type: 3}
-  - {fileID: 5110917838449754828, guid: bc38f4c6ffc235049a76c78405ec9115, type: 3}
+  - {fileID: 1755589199476723222, guid: 30e93259e96dccf48b9682fc4ed4204c, type: 3}
+  - {fileID: -5609056657509152182, guid: bc38f4c6ffc235049a76c78405ec9115, type: 3}
   _emissionPoint: {fileID: 1681555671}
   _parent: {fileID: 1681555671}
   _minSpawnInterval: 0.3
