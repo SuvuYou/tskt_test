@@ -10,4 +10,9 @@ public class MovementStats : ScriptableObject
 
     [Header("Rotation")]
     public float RotationSpeed;
+
+    [Header("Collision")]
+    public float CapsuleHeight = 2.0f;
+    public float CapsuleRadius = 0.5f;
+    public LayerMask CollisionLayer;
 }

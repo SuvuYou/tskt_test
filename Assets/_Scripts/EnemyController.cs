@@ -27,15 +27,11 @@ public class EnemyController : MonoBehaviour
         _shootingSystem.Enable();
     }
 
-    public void Kill() 
-    {
-        Destroy(gameObject);
-    }
-
     private void Update()
     {
         _movementSystem.ApplyAcceleration(GetVectorToTarget());
         _movementSystem.ApplyDrag();
+        _movementSystem.CollisionCheck(transform);
 
         transform.position += _movementSystem.State.Velocity * Time.deltaTime;
 

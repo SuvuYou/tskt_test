@@ -21,9 +21,12 @@ public class Bullet : MonoBehaviour
     {
         if (other.transform.root.TryGetComponent(out IDamagable damagable))
         {
-            Vector2 hitDirection = Vector3.ProjectOnPlane(other.transform.root.transform.InverseTransformDirection(transform.position - other.transform.root.position), Vector3.up).normalized.ToVector2WithXZ();
+            var globalDirectionFromTarget = transform.position - other.transform.root.position;
+            var localDirectionFromTarget = other.transform.root.transform.InverseTransformDirection(globalDirectionFromTarget);
 
-            damagable.TakeDamage(_damage, hitDirection.ClosestHitDirection());
+            Vector2 hitDirection = Vector3.ProjectOnPlane(localDirectionFromTarget, Vector3.up).normalized.ToVector2WithXZ();
+
+            damagable.TakeDamage(_damage, hitDirection);
         }
 
         BulletsManager.Instance.DestroyBullet(this);

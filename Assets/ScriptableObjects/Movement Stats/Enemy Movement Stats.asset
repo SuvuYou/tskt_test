@@ -16,3 +16,8 @@ MonoBehaviour:
   Drag: 5
   MaxVelocity: 10
   RotationSpeed: 5
+  CapsuleHeight: 2
+  CapsuleRadius: 0.5
+  CollisionLayer:
+    serializedVersion: 2
+    m_Bits: 64

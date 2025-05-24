@@ -4,7 +4,7 @@ public class PlayerController : MonoBehaviour, IDamagable
 {
     public HitEvent OnTakeDamage;
 
-    public void TakeDamage(int damage, HitDirection hitDirection) 
+    public void TakeDamage(int damage, Vector3 hitDirection) 
     {
         _healthSystem.TakeDamage(damage);
 
@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour, IDamagable
     } 
 
     [SerializeField] private Transform _cameraTransform;
+    [SerializeField] private Transform _playerMesh;
     [SerializeField] private InputReaderSO _inputReaderSO;
 
     [SerializeField] private MovementStats _movementStats;
@@ -32,10 +33,11 @@ public class PlayerController : MonoBehaviour, IDamagable
     {
         _movementSystem.ApplyAcceleration(MapVectorToCameraSpace(_inputReaderSO.Direction));
         _movementSystem.ApplyDrag();
+        _movementSystem.CollisionCheck(transform);
 
         transform.position += _movementSystem.State.Velocity * Time.deltaTime;
 
-        _movementSystem.ApplyRotateInDirection(transform, GetFacingDirection());
+        _movementSystem.ApplyRotateInDirection(_playerMesh, GetFacingDirection());
     }
 
     private Vector2 MapVectorToCameraSpace(Vector2 direction)
