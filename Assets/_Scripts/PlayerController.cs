@@ -18,26 +18,26 @@ public class PlayerController : MonoBehaviour, IDamagable
     [SerializeField] private MovementStats _movementStats;
     [SerializeField] private HealthStats _healthStats;
 
-    private MovementSystem _movementSystem;
+    public MovementSystem PlayerMovementSystem { get; private set; }
     private HealthSystem _healthSystem;
 
-    private void Start()
+    private void Awake()
     {
         _inputReaderSO.EnableActions();      
 
-        _movementSystem = new MovementSystem(_movementStats);
+        PlayerMovementSystem = new MovementSystem(_movementStats);
         _healthSystem = new HealthSystem(_healthStats);
     }
 
     private void Update()
     {
-        _movementSystem.ApplyAcceleration(MapVectorToCameraSpace(_inputReaderSO.Direction));
-        _movementSystem.ApplyDrag();
-        _movementSystem.CollisionCheck(transform);
+        PlayerMovementSystem.ApplyAcceleration(MapVectorToCameraSpace(_inputReaderSO.Direction));
+        PlayerMovementSystem.ApplyDrag();
+        PlayerMovementSystem.CollisionCheck(transform);
 
-        transform.position += _movementSystem.State.Velocity * Time.deltaTime;
+        transform.position += PlayerMovementSystem.State.Velocity * Time.deltaTime;
 
-        _movementSystem.ApplyRotateInDirection(_playerMesh, GetFacingDirection());
+        PlayerMovementSystem.ApplyRotateInDirection(_playerMesh, GetFacingDirection());
     }
 
     private Vector2 MapVectorToCameraSpace(Vector2 direction)
@@ -51,6 +51,6 @@ public class PlayerController : MonoBehaviour, IDamagable
 
     private Vector3 GetFacingDirection()
     {
-        return _movementSystem.State.LastNonZeroVelocity.normalized;
+        return PlayerMovementSystem.State.LastNonZeroVelocity.normalized;
     }
 }

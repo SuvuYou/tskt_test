@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 853f8ef03982caa46856a14ddf4a86aa, type: 3}
   m_Name: Enemy Movement Stats
   m_EditorClassIdentifier: 
-  Acceleration: 200
+  Acceleration: 150
   Drag: 5
   MaxVelocity: 10
-  RotationSpeed: 5
+  RotationSpeed: 15
   CapsuleHeight: 2
   CapsuleRadius: 0.5
   CollisionLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 320
+  VelocityMovementThreshold: 2

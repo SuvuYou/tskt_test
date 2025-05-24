@@ -2033,6 +2033,12 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &921676952 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8434589221339364836, guid: 64b182395c0b6744a920c74bce3ece13,
+    type: 3}
+  m_PrefabInstance: {fileID: 1511181827}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &923453503
 GameObject:
   m_ObjectHideFlags: 0
@@ -3561,7 +3567,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8434589221339364836, guid: 64b182395c0b6744a920c74bce3ece13,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1511181831}
   m_SourcePrefab: {fileID: 100100000, guid: 64b182395c0b6744a920c74bce3ece13, type: 3}
 --- !u!4 &1511181828 stripped
 Transform:
@@ -3569,6 +3579,32 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1511181827}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1511181829 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2929119099450096932, guid: 64b182395c0b6744a920c74bce3ece13,
+    type: 3}
+  m_PrefabInstance: {fileID: 1511181827}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1511181830 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9099099296081717086, guid: 64b182395c0b6744a920c74bce3ece13,
+    type: 3}
+  m_PrefabInstance: {fileID: 1511181827}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1511181831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921676952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d47c010f5b68b74483919afc4246bfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _resetPositionTransform: {fileID: 1511181830}
+  _resetPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &1511439342
 GameObject:
   m_ObjectHideFlags: 0
@@ -4820,8 +4856,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1850242344}
-  - component: {fileID: 1850242345}
   - component: {fileID: 1850242347}
+  - component: {fileID: 1850242345}
+  - component: {fileID: 1850242348}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -4905,6 +4942,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1850242348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850242343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa418ca602bcf17409c2251b87ace68d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animationController: {fileID: 1511181829}
+  _playerController: {fileID: 1850242345}
 --- !u!1 &1857905009
 GameObject:
   m_ObjectHideFlags: 0

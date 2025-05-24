@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 853f8ef03982caa46856a14ddf4a86aa, type: 3}
   m_Name: Player Movement Stats
   m_EditorClassIdentifier: 
-  Acceleration: 200
-  Drag: 5
+  Acceleration: 250
+  Drag: 8
   MaxVelocity: 30
-  RotationSpeed: 5
+  RotationSpeed: 25
   CapsuleHeight: 2
   CapsuleRadius: 0.5
   CollisionLayer:
